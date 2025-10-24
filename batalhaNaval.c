@@ -1,22 +1,137 @@
 #include <stdio.h>
 
+// Função para definir forma do octaedro:
+int valor(int numero){
+    if (numero < 0){
+        return -numero;
+    }
+    return numero;
+}
+
+void constroi_octaedro(int matriz[5][5]){
+    // centro da matriz:
+    int centro = 2;
+
+    // construir octaedro:
+    for (int i = 0; i < 5; i++){
+        for (int j = 0; j < 5; j++){
+            if (valor(i - centro) + valor(j - centro) <= centro){
+                matriz[i][j] = 1;
+            } else {
+                matriz[i][j] = 0;
+            }
+        }
+    }
+
+}
+
 int main(){
     // Define tabuleiro, 0 é água...
     int tabuleiro[10][10] = {0};
+
     // Navio Vertical:
     int navio1[3] = {3, 3, 3};
-    int n1_linha = 4, n1_coluna = 5;
+    int n1_linha = 0, n1_coluna = 0;
+
     // Navio Horizontal:
     int navio2[3] = {3, 3, 3};
-    int n2_linha = 7, n2_coluna = 2;
+    int n2_linha = 0, n2_coluna = 7;
+
     // Navios diagonais:
     int navio_diagonal[3] = {3, 3, 3};
-    int nd_linha = 1, nd_coluna = 4;
+    int nd_linha = 7, nd_coluna = 7;
     int navio_diagonal2[3] = {3, 3, 3};
-    int nd2_linha = 2, nd2_coluna = 8;
+    int nd2_linha = 7, nd2_coluna = 2;
+
+    // Habilidades:
+    int cone[5][5] = {0};
+    int cruz[5][5] = {0};
+    int octaedro[5][5] = {0};
+
     // Cabeçalho:
     char linha[10] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
+
+    // Constroi habilidades:
+    for (int i = 0; i < 5; i++){
+        for (int j = 0; j < 5; j++){
+            // Cone:
+            if (j >= (2 - i) && j <= (2 +i)){
+                cone[i][j] = 1;
+            }
+
+            // Cruz:
+            if (i == 2 || j == 2){
+                cruz[i][j] = 1;
+            }
+        }
+    }
     
+    constroi_octaedro(octaedro);
+
+    // Adiciona habilidades no tabuleiro:
+    int centro_habilidade = 2;
+
+    // Cone:
+    int cone_linha = 0;
+    int cone_coluna = 3;
+
+    for (int i = 0; i < 5; i++){
+        for (int j = 0; j < 5; j++){
+            if (cone[i][j] == 1){
+                int tabuleiro_linha = cone_linha + i;
+                int tabuleiro_coluna = cone_coluna + (j - centro_habilidade);
+
+                // Verifica limite e disponibilidade do tabuleiro:
+                if (tabuleiro_linha >= 0 && tabuleiro_linha < 10 && tabuleiro_coluna >= 0 && tabuleiro_coluna < 10){
+                    if (tabuleiro[tabuleiro_linha][tabuleiro_coluna] == 0){
+                        tabuleiro[tabuleiro_linha][tabuleiro_coluna] = 5;
+                    }
+                }
+            }
+        }
+    }
+
+    // Cruz:
+    int cruz_linha = 4;
+    int cruz_coluna = 4;
+
+    for (int i = 0; i < 5; i++){
+        for (int j = 0; j < 5; j++){
+            if (cruz[i][j] == 1){
+                int tabuleiro_linha = cruz_linha + (i - centro_habilidade);
+                int tabuleiro_coluna = cruz_coluna + (j - centro_habilidade);
+
+                // Verifica limite e disponibilidade do tabuleiro:
+                if (tabuleiro_linha >= 0 && tabuleiro_linha < 10 && tabuleiro_coluna >= 0 && tabuleiro_coluna < 10){
+                    if (tabuleiro[tabuleiro_linha][tabuleiro_coluna] == 0){
+                        tabuleiro[tabuleiro_linha][tabuleiro_coluna] = 5;
+                    }
+                }
+            }
+        }
+    }
+
+    // Octaedro:
+    int octaedro_linha = 4;
+    int octaedro_coluna = 1;
+
+    for (int i = 0; i < 5; i++){
+        for (int j = 0; j < 5; j++){
+            if (octaedro[i][j] == 1){
+                int tabuleiro_linha = octaedro_linha + (i - centro_habilidade);
+                int tabuleiro_coluna = octaedro_coluna + (j - centro_habilidade);
+
+                // Verifica limite e disponibilidade do tabuleiro:
+                if (tabuleiro_linha >= 0 && tabuleiro_linha < 10 && tabuleiro_coluna >= 0 && tabuleiro_coluna < 10){
+                    if (tabuleiro[tabuleiro_linha][tabuleiro_coluna] == 0){
+                        tabuleiro[tabuleiro_linha][tabuleiro_coluna] = 5;
+                    }
+                }
+            }
+        }
+    }
+
+
 
     // Verifica limite e disponibilidade de casas verticais:
     int quantia_navios = 3;
@@ -114,6 +229,7 @@ int main(){
         printf("Casa já ocupada.\n");
     }
 
+
     // Imprime cabecalho:
     printf(" ===============BATALHA NAVAL===============\n");
     printf("   |");
@@ -123,7 +239,6 @@ int main(){
     printf("\n");
 
     
-
     // Imprime numerais das casas:
     for (int vertical = 0; vertical < 10; vertical++){
         printf("%2d |", vertical + 1);
