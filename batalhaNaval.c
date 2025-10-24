@@ -9,6 +9,11 @@ int main(){
     // Navio Horizontal:
     int navio2[3] = {3, 3, 3};
     int n2_linha = 7, n2_coluna = 2;
+    // Navios diagonais:
+    int navio_diagonal[3] = {3, 3, 3};
+    int nd_linha = 1, nd_coluna = 4;
+    int navio_diagonal2[3] = {3, 3, 3};
+    int nd2_linha = 2, nd2_coluna = 8;
     // Cabeçalho:
     char linha[10] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
     
@@ -57,6 +62,53 @@ int main(){
     if (casa_disponivel){
         for (int i = 0; i < quantia_navios; i++){
             tabuleiro[n2_linha][n2_coluna + i] = navio2[i];
+        }
+    } else {
+        printf("Casa já ocupada.\n");
+    }
+
+    // Verifica limite e disponibilidade de casas diagonais:
+    casa_disponivel = 1;
+
+    if (nd_linha + quantia_navios > 10 || nd_coluna + quantia_navios > 10){
+        printf("Navio diagonal (1) excedeu o limite do tabuleiro.\n");
+        casa_disponivel = 0;
+    } else {
+        for (int i = 0; i < quantia_navios; i++){
+            if (tabuleiro[nd_linha + i][nd_coluna + i] != 0) {
+                casa_disponivel = 0;
+                break;
+            }
+        }
+    }
+
+    // Adiciona navio diagonal (1):
+    if (casa_disponivel) {
+        for (int i = 0; i < quantia_navios; i++){
+            tabuleiro[nd_linha + i][nd_coluna + i] = 3;
+        }
+    } else {
+        printf("Casa já ocupada.\n");
+    }
+
+    // Verifica limite e disponibilidade de casas diagonais:
+    casa_disponivel = 1;
+    if (nd2_linha + quantia_navios > 10 || (nd2_coluna - (quantia_navios - 1)) < 0){
+        printf("Navio diagonal (2) excedeu o limite do tabuleiro.\n");
+        casa_disponivel = 0;
+    } else {
+        for (int i = 0; i < quantia_navios; i++){
+            if (tabuleiro[nd2_linha + i][nd2_coluna - i] != 0){
+                casa_disponivel = 0;
+                break;
+            }
+        }
+    }
+
+    // Adiciona navio diagonal (2):
+    if (casa_disponivel) {
+        for (int i = 0; i < quantia_navios; i++){
+            tabuleiro[nd2_linha + i][nd2_coluna - i] = 3;
         }
     } else {
         printf("Casa já ocupada.\n");
