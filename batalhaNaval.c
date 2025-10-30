@@ -241,13 +241,27 @@ int main(){
     
     // Imprime numerais das casas:
     for (int vertical = 0; vertical < 10; vertical++){
-        printf("%2d |", vertical + 1);
-        // Imprime tabuleiro:
-        for (int horizontal = 0; horizontal < 10; horizontal++){
-            printf(" %d |", tabuleiro[vertical][horizontal]);
+    printf("%2d |", vertical + 1);
+    // Imprime tabuleiro:
+    for (int horizontal = 0; horizontal < 10; horizontal++){
+        // Altera a exibição de número para caractere
+        switch (tabuleiro[vertical][horizontal]) {
+            case 0:  // Água
+                printf(" ~ |");
+                break;
+            case 3:  // Navio
+                printf(" N |");
+                break;
+            case 5:  // Área de Habilidade
+                printf(" X |");
+                break;
+            default: // Caso algo inesperado ocorra
+                printf(" ? |");
+                break;
         }
-        printf("\n");
     }
+    printf("\n");
+}
 
     return 0;
 }
